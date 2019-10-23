@@ -12,16 +12,16 @@
           	http://www.springframework.org/schema/security/spring-security-4.2.xsd">
         
     <context:component-scan base-package="com.v2soft.training" />
-    <!-- <bean id="employeeController" class="com.v2soft.training.controller.EmployeeController" /> -->
+    <bean id="employeeController" class="com.v2soft.training.controller.EmployeeController" />
     <context:property-placeholder location="classpath:application.properties"/>
     
     <bean id="employeeDao" class="com.v2soft.training.dao.EmployeeDaoImpl">
 		<property name="sessionFactory" ref="sessionFactory"></property>
 	</bean>
 	
-	<!-- <bean id="addResponseHeaderFilter" class="com.v2soft.training.filter.AddResponseHeaderFilter">
+	<bean id="addResponseHeaderFilter" class="com.v2soft.training.filter.AddResponseHeaderFilter">
 		<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean> -->
+	</bean>
     
     <!-- <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
     <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter" /> -->
@@ -30,34 +30,34 @@
         <property name="suffix" value=".jsp" />
     </bean>
  
- 	<!-- <bean id="dataSource"
+ 	<bean id="dataSource"
 	  class="org.apache.commons.dbcp.BasicDataSource">
-	    <property name="driverClassName" value="${jdbc.driverClassName}" />
-	    <property name="url" value="${jdbc.url}" />
-	    <property name="username" value="${jdbc.user}" />
-	    <property name="password" value="${jdbc.pass}" />
-	</bean> -->
+	    <property name="driverClassName" value="${spring.datasource.driver-class-name}" />
+	    <property name="url" value="${spring.datasource.url}" />
+	    <property name="username" value="${spring.datasource.username}" />
+	    <property name="password" value="${spring.datasource.password}" />
+	</bean>
  
-	<!-- <bean id="sessionFactory"
+	<bean id="sessionFactory"
 	  class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
 	    <property name="dataSource" ref="dataSource" />
 	    <property name="packagesToScan" value="com.v2soft.training" />
 	    <property name="hibernateProperties">
 	        <props>
-	            <prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
-	            <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+	            <prop key="hibernate.hbm2ddl.auto">${spring.jpa.hibernate.hbm2ddl.auto}</prop>
+	            <prop key="hibernate.dialect">${spring.jpa.hibernate.dialect}</prop>
 	            
-	            <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
-	            <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
+	            <prop key="hibernate.show_sql">${spring.jpa.hibernate.show_sql}</prop>
+	            <prop key="hibernate.format_sql">${spring.jpa.hibernate.format_sql}</prop>
 	        </props>
 	    </property>
-	</bean> -->
+	</bean>
 	 
-	<!-- <bean id="transactionManager"
+	<bean id="transactionManager"
 	  class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 	    <property name="sessionFactory" ref="sessionFactory" />
-	</bean> -->
+	</bean>
 	 
-	<!-- <bean id="persistenceExceptionTranslationPostProcessor"
-	  class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/> -->
+	<bean id="persistenceExceptionTranslationPostProcessor"
+	  class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 </beans>

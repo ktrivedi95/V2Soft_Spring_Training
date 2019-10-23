@@ -1,6 +1,7 @@
 package com.v2soft.training.dao;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -258,6 +259,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	        
 	        employeeMod.setEmployeeAddresses(employeeAddresses);
 	        
+	        LocalDateTime now = LocalDateTime.now();
+	        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        String dbQuery = "update LoginSession set status='T', logoutTime='" + dtf.format(now) + "'"
+	        		+ " where username='" + login.getUsername() +"'";
+	        int result = getCurrentSession().createQuery(dbQuery).executeUpdate();
+	        
 	        //Add session to table
 	        UUID uuid = UUID.randomUUID();
 	        LoginSessionId lsi = new LoginSessionId();
@@ -334,26 +341,11 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	
 	@Transactional
 	public void performLogout(String loginSessionId) {
-		String createQuery = "from LoginSession";
-	    Query<LoginSession> query = getCurrentSession().createQuery(createQuery);
-	    List<LoginSession> loginSession = query.getResultList();
-	    
-	    for(LoginSession loginSess: loginSession) {
-	        if(loginSessionId.equals(loginSess.getId().getLoginSessionId())) {
-	    	    if(loginSess.getStatus().equals("A")) {
-	    			LoginSession logoutSession = (LoginSession)getCurrentSession().createQuery(createQuery).uniqueResult();
-	    			if(loginSessionId.equals(logoutSession.getId().getLoginSessionId())) {
-	    				Date now = new Date(Calendar.getInstance().getTime().getTime());
-	    				logoutSession.setStatus("T");
-	    				logoutSession.setLogoutTime(now);
-	    			}
-	    			
-	    		} else {
-	    			System.out.println("SESSION IS ALREADY TERMINATED");
-	    		}
-	        }
-	        break;
-	    }
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		String dbQuery = "update LoginSession set status='T', logoutTime='" + dtf.format(now) + "'"
+						+ " where id.loginSessionId='" + loginSessionId +"'";
+		getCurrentSession().createQuery(dbQuery).executeUpdate();
 	}
 	
 	private List<EmployeeMod> convertEmployeeListToEmployeeModList(List<Employee> empList) {

@@ -39,14 +39,17 @@ import com.v2soft.training.service.EmployeeList;
 import com.v2soft.training.service.EmployeeService;
 
 @Controller
-//@RequestMapping("/filter")
 public class EmployeeController {
-	
-	//private EmployeeList employeeList = new EmployeeList();
+
 	private ObjectMapper mapper = new ObjectMapper();
 	
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@RequestMapping(value="/", method=RequestMethod.GET)
+	public ModelAndView index() throws JsonProcessingException {
+		return new ModelAndView("index");
+	}
 	
 	@RequestMapping(value="/getEmployeeById/{employeeId}", method=RequestMethod.GET)
 	@ResponseBody
@@ -111,11 +114,6 @@ public class EmployeeController {
 	
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public ModelAndView logout (HttpServletRequest request, HttpServletResponse response, @ModelAttribute("login") LoginCredentials login) {
-	    /*Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-	    if (auth != null){    
-	        new SecurityContextLogoutHandler().logout(request, response, auth);
-	    }*/
-		
 		Cookie[] cookies = request.getCookies();
         String loginSessionId = "";
         for(Cookie c: cookies) {
@@ -124,6 +122,12 @@ public class EmployeeController {
         }
         
 		employeeService.performLogout(loginSessionId);
+		
+		Cookie[] removeCookies = request.getCookies();
+        for(Cookie c: removeCookies) {
+        	c.setMaxAge(0);
+        }
+		//response.addCookie(new Cookie("LoginSessionId", ""));
 	    return new ModelAndView("login");
 	}
 	

@@ -1,6 +1,7 @@
 package com.v2soft.training.filter;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -53,8 +54,13 @@ public class AddResponseHeaderFilter implements Filter {
 	public void init(FilterConfig fConfig) throws ServletException {
 		//this.context = fConfig.getServletContext();
 		//this.context.log("AuthenticationFilter initialized");
-		String excludePattern = fConfig.getInitParameter("excludedUrls");
-        excludedUrls = Arrays.asList(excludePattern.split(","));
+		//String excludePattern = fConfig.getInitParameter("excludedUrls");
+        //excludedUrls = Arrays.asList(excludePattern.split(","));
+		
+		excludedUrls = new ArrayList<String>();
+		excludedUrls.add("/");
+		excludedUrls.add("/login");
+		excludedUrls.add("/loginProcess");
         
         ApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(fConfig.getServletContext());
 	    sessionFactory = (SessionFactory)ctx.getBean("sessionFactory");
@@ -78,7 +84,7 @@ public class AddResponseHeaderFilter implements Filter {
             
             if(!checkLoginSession(loginSessionId)) {
             	//THE STATUS IS TERMINATED
-            	response.sendRedirect("/EmployeePortal/login");
+            	response.sendRedirect("/login");
             } else {
             	//THE STATUS IS ACTIVE
             	chain.doFilter(request, response);
